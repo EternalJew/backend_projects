@@ -1,0 +1,31 @@
+# Dockerfile-django
+FROM python:3.11.4
+
+# Встановлюємо GDAL та інші необхідні бібліотеки
+RUN apt-get update && apt-get install -y \
+    gdal-bin \
+    libgdal-dev \
+    && apt-get clean
+
+# Встановлюємо змінні середовища для GDAL
+ENV CPLUS_INCLUDE_PATH=/usr/include/gdal
+ENV C_INCLUDE_PATH=/usr/include/gdal
+ENV GDAL_VERSION=3.4.1  
+
+# Налаштовуємо робочий каталог для Django
+ENV APP /app
+RUN mkdir $APP
+WORKDIR $APP
+
+# Відкриваємо порт для Django
+EXPOSE 8000
+
+# Копіюємо файл залежностей requirements.txt і встановлюємо залежності
+COPY requirements.txt .
+RUN pip install -r requirements.txt
+
+# Копіюємо код Django-проєкту
+COPY . .
+
+# Запускаємо Django-сервер
+CMD ["python", "manage.py", "runserver", "0.0.0.0:8000"]

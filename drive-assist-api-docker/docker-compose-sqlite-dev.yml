@@ -1,0 +1,25 @@
+version: '3'
+services:
+  web:
+    build:
+      context: .  # Вказуємо поточну директорію, де знаходиться Dockerfile
+      dockerfile: Dockerfile-django  # Вказуємо ім'я файлу Dockerfile
+    container_name: django_app
+    command: ["python", "driveassist/manage.py", "runserver", "0.0.0.0:8000"]
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app  # Прив'язка поточного каталогу до /app у контейнері для спільного доступу до файлів
+    depends_on:
+      - redis
+
+  redis:
+    image: "redis:alpine"
+    command: redis-server --requirepass redis_password
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis:/var/lib/redis
+
+volumes:
+  redis:

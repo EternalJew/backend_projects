@@ -1,0 +1,69 @@
+version: '3'
+
+services:
+  urban_card_flask:
+    container_name: urban_card_flask
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile-flask
+    networks:
+      - api-it-cluster
+    environment:
+      - DB_SERVER=urban_card_db_postgresql
+      - POSTGRES_DB=urban_card
+      - POSTGRES_USER=urban
+      - POSTGRES_PASSWORD=test
+#      - VIRTUAL_HOST=api-it-card.itcluster.rv.ua
+#      - LETSENCRYPT_HOST=api-it-card.itcluster.rv.ua
+#      - LETSENCRYPT_EMAIL=bubnov_ak19@nuwm.edu.ua
+#      - VIRTUAL_PORT=5000
+
+    volumes:
+      - migrations:/app/migrations/
+      - ./flask_api/script.py.mako:/app/script.py.mako:rw
+    depends_on:
+      - urban_card_db_postgresql
+
+  urban_card_db_postgresql:
+    restart: always
+    container_name: urban_card_db_postgresql
+    image: postgres:14
+    environment:
+      - POSTGRES_DB=urban_card
+      - POSTGRES_USER=urban
+      - POSTGRES_PASSWORD=test
+#    ports:
+#      - "5432:5432"
+    networks:
+      - api-it-cluster
+    volumes:
+      - data_postgresql:/var/lib/postgresql/data:rw
+ #     - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+  itcard_nginx:
+    restart: always
+    container_name: urban-card-web-container
+    build:
+      context: .
+      dockerfile: Dockerfile-nginx
+    environment:
+      - VIRTUAL_HOST=api-it-card.itcluster.rv.ua
+      - LETSENCRYPT_HOST=api-it-card.itcluster.rv.ua
+      - LETSENCRYPT_EMAIL=bubnov_ak19@nuwm.edu.ua
+      - VIRTUAL_PORT=5000
+    networks:
+      - api-it-cluster
+    expose:
+      - 80
+      - 443
+    depends_on:
+      - urban_card_flask
+
+volumes:
+   data_postgresql:
+   migrations:
+
+networks:
+   api-it-cluster:
+         external: True

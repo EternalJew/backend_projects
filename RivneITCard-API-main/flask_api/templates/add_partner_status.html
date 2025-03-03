@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Partner Status</title>
+</head>
+<body>
+    <h1>Add Partner Status</h1>
+    <form method="post" action="{{ url_for('partner_status.add_partner_status') }}">
+
+        <label for="{{ form.name.id }}">{{ form.name.label.text }}</label>
+        {{ form.name(class="form-control", placeholder=form.name.label.text) }}
+        {% if form.name.errors %}
+            <ul class="errors">
+                {% for error in form.name.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br>
+        <label for="{{ form.value.id }}">{{ form.value.label.text }}</label>
+        {{ form.value(class="form-control", placeholder=form.value.label.text) }}
+        {% if form.value.errors %}
+            <ul class="errors">
+                {% for error in form.value.errors %}
+                    <li>{{ error }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+        <br>
+        {{ form.submit(class="btn btn-primary") }}
+    </form>
+</body>
+</html>

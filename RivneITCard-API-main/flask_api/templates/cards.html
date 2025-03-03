@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Partner Cards</title>
+</head>
+<body>
+    <h1>Partner Cards</h1>
+    <p>Sort by:
+        <a href="{{ url_for('partner.partner_card', sort_by='date') }}">Date</a> |
+        <a href="{{ url_for('partner.partner_card', sort_by='discount') }}">Discount</a> |
+        <a href="{{ url_for('partner.partner_card') }}">None</a>
+    </p>
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Promo Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for card in cards %}
+            <tr>
+                <td>{{ card[0] }}</td>
+                <td>{{ card[1] }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Додати Партнера</title>
+</head>
+<body>
+    <h1>Додати Партнера</h1>
+    <form method="post" action="{{ url_for('partner.add_partner') }}">
+        <h2>Partner Information</h2>
+        {{ form.name.label }} {{ form.name() }}<br>
+        {{ form.phone.label }} {{ form.phone() }}<br>
+        {{ form.logo.label }} {{ form.logo() }}<br>
+        {{ form.promo_images.label }} {{ form.promo_images() }}<br>
+        {{ form.web_site.label }} {{ form.web_site() }}<br>
+        <h2>Location Information</h2>
+        <ul>
+            {{ form.locations.label }}
+            {% for location in form.locations %}
+                <li>
+                    {{ location.street_name.label }} {{ location.street_name }}<br>
+                    {{ location.partner.label }} {{ location.partner }}<br>
+                    {{ location.lat.label }} {{ location.lat }}<br>
+                    {{ location.lon.label }} {{ location.lon }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+        <h2>Discount Information</h2>
+        {{ form.discount.label }} {{ form.discount() }}<br>
+        {{ form.d_promo_code.label }} {{ form.d_promo_code() }}<br>
+        {{ form.d_value.label }} {{ form.d_value() }}<br>
+        {{ form.status.label }} {{ form.status() }}<br>
+        <h2>Manager</h2>
+        <ul>
+            {{ form.managers.label }}
+            {% for manager in form.managers %}
+                <li>
+                    {{ manager.first_name.label }} {{ manager.first_name }}<br>
+                    {{ manager.last_name.label }} {{ manager.last_name }}<br>
+                    {{ manager.phone.label }} {{ manager.phone }}<br>
+                    {{ manager.email.label }} {{ manager.email }}<br>
+                    {{ manager.user_type.label }} {{ manager.user_type }}<br>
+                    {{ manager.partner_name.label }} {{ manager.partner_name }}<br>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form.type_name.label }} {{ form.type_name() }}<br>
+        {{ form.exclusive.label }} {{ form.exclusive() }}<br>
+        <input type="submit" value="Додати">
+    </form>
+</body>
+</html>
